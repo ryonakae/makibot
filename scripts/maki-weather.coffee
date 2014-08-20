@@ -74,7 +74,8 @@ module.exports = (robot) ->
         # 最低気温がない
         else
           temp = "最高気温は不明、" +
-          "最低気温は不明よ。\n"
+          "最低気温も不明よ。\n" +
+          "な、なによ。情報がないんだからしょうがないじゃない！\n"
 
       text = "#{place}の今日の天気よ。\n" +
       "予報は「#{result.forecasts[0].telop}」ね。\n"+
