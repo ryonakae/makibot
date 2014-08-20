@@ -30,7 +30,3 @@ module.exports = (robot) ->
   robot.respond /lovelivegif$/i, (msg) ->
     blog = msg.random Object.keys(SOURCES)
     getGif blog, msg
-
-  for blog,pattern of SOURCES
-    robot.respond pattern, (msg) ->
-      getGif blog, msg
