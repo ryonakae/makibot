@@ -126,7 +126,7 @@ module.exports = (robot) ->
             "最低気温も不明よ。\n" +
             "な、なによ。情報がないんだからしょうがないじゃない！\n"
 
-        text = "9時よ。#{place}の今日の天気よ。\n" +
+        text = "@everyone 9時よ。#{place}の今日の天気よ。\n" +
         "予報は「#{result.forecasts[0].telop}」ね。\n"+
         temp +
         "ちなみに明日の#{place}の天気は「#{result.forecasts[1].telop}」よ。\n" +
