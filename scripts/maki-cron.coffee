@@ -59,3 +59,79 @@ module.exports = (robot) ->
       say = random makichan_konbanha
       room = {room: '#hubot-test'}
       robot.send room, say
+
+
+  # 今日の天気教えて真姫ちゃん
+  parser = require('xml2json')
+  async = require('async')
+  require('date-utils')
+  weathearList = require('../node_modules/hubot-weather-ja/config/weather_area_list.json')
+
+  place  = '東京'
+
+  new cron
+    cronTime: '0 0 9 * * 1-5' #平日10時
+    # cronTime: '*/10 * * * * *' #10秒おき
+    start: true
+    timeZone: "Asia/Tokyo"
+    onTick: ->
+      room = {room: '#hubot-test'}
+
+      async.waterfall([
+        (callback) ->
+          weathearList.some((v,i) ->
+            if v.city instanceof Array
+              v.city.some((data, j) ->
+                if data.title == place
+                  callback(null, data)
+                  return true
+              )
+            else
+              if v.city.title == place
+                callback(null, v.city)
+                return true
+          )
+        , (areaData, callback) ->
+          # livedoor 天気予報APIのバグ arealistのIDが5桁のものは0パディングしないといけない
+          areaId =  ("0" + areaData.id).slice(-6)
+          robot
+            .http('http://weather.livedoor.com/forecast/webservice/json/v1')
+            .query(city : areaId)
+            .get() (err, res, body) ->
+              json = JSON.parse(body)
+              callback(null, json)
+      ], (err, result) ->
+        throw new Error('err catched.') if err
+        forecastTime = new Date(result.publicTime)
+        temp =
+        # 最高気温がある
+        if result.forecasts[0].temperature.max != null
+          # 最低気温がある
+          if result.forecasts[0].temperature.min != null
+            temp = "最高気温は#{result.forecasts[0].temperature.max.celsius}度、" +
+            "最低気温は#{result.forecasts[0].temperature.min.celsius}度よ。\n"
+          # 最低気温がない
+          else
+            temp = "最高気温は#{result.forecasts[0].temperature.max.celsius}度、" +
+            "最低気温は不明よ。\n"
+        # 最高気温がない
+        else
+          # 最低気温がある
+          if result.forecasts[0].temperature.min != null
+            temp = "最高気温は不明、" +
+            "最低気温は#{result.forecasts[0].temperature.min.celsius}度よ。\n"
+          # 最低気温がない
+          else
+            temp = "最高気温は不明、" +
+            "最低気温も不明よ。\n" +
+            "な、なによ。情報がないんだからしょうがないじゃない！\n"
+
+        text = "9時よ。#{place}の今日の天気よ。\n" +
+        "予報は「#{result.forecasts[0].telop}」ね。\n"+
+        temp +
+        "ちなみに明日の#{place}の天気は「#{result.forecasts[1].telop}」よ。\n" +
+        "詳しい情報はURLを参照しなさいよねっ。\n\n" +
+        "#{result.link}"
+
+        robot.send room, text
+      )

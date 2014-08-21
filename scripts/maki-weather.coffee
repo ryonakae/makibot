@@ -60,7 +60,7 @@ module.exports = (robot) ->
         # 最低気温がある
         if result.forecasts[0].temperature.min != null
           temp = "最高気温は#{result.forecasts[0].temperature.max.celsius}度、" +
-          "最低気温は#{result.forecasts[0].temperature.min}度よ。\n"
+          "最低気温は#{result.forecasts[0].temperature.min.celsius}度よ。\n"
         # 最低気温がない
         else
           temp = "最高気温は#{result.forecasts[0].temperature.max.celsius}度、" +
@@ -70,7 +70,7 @@ module.exports = (robot) ->
         # 最低気温がある
         if result.forecasts[0].temperature.min != null
           temp = "最高気温は不明、" +
-          "最低気温は#{result.forecasts[0].temperature.min}度よ。\n"
+          "最低気温は#{result.forecasts[0].temperature.min.celsius}度よ。\n"
         # 最低気温がない
         else
           temp = "最高気温は不明、" +
@@ -80,6 +80,7 @@ module.exports = (robot) ->
       text = "#{place}の今日の天気よ。\n" +
       "予報は「#{result.forecasts[0].telop}」ね。\n"+
       temp +
+      "ちなみに明日の#{place}の天気は「#{result.forecasts[1].telop}」よ。\n" +
       "詳しい情報はURLを参照しなさいよねっ。\n\n" +
       "#{result.link}"
 
