@@ -20,7 +20,7 @@ module.exports = (robot) ->
     timeZone: "Asia/Tokyo"
     onTick: ->
       say = random makichan_ohayo
-      room = {room: '#talk'}
+      room = {room: '#hubot'}
       robot.send room, say
 
 
@@ -38,7 +38,7 @@ module.exports = (robot) ->
     timeZone: "Asia/Tokyo"
     onTick: ->
       say = random makichan_konnichiha
-      room = {room: '#talk'}
+      room = {room: '#hubot'}
       robot.send room, say
 
 
@@ -57,7 +57,7 @@ module.exports = (robot) ->
     timeZone: "Asia/Tokyo"
     onTick: ->
       say = random makichan_konbanha
-      room = {room: '#talk'}
+      room = {room: '#hubot'}
       robot.send room, say
 
 
@@ -75,7 +75,7 @@ module.exports = (robot) ->
     start: true
     timeZone: "Asia/Tokyo"
     onTick: ->
-      room = {room: '#talk'}
+      room = {room: '#hubot'}
 
       async.waterfall([
         (callback) ->
@@ -126,7 +126,7 @@ module.exports = (robot) ->
             "最低気温も不明よ。\n" +
             "な、なによ。情報がないんだからしょうがないじゃない！\n"
 
-        text = "@everyone 9時よ。#{place}の今日の天気よ。\n" +
+        text = "@channel 9時よ。#{place}の今日の天気よ。\n" +
         "予報は「#{result.forecasts[0].telop}」ね。\n"+
         temp +
         "ちなみに明日の#{place}の天気は「#{result.forecasts[1].telop}」よ。\n" +
